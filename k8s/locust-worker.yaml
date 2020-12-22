@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-worker
+  labels:
+    name: locust-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-worker
+  template:
+    metadata:
+      labels:
+        app: locust-worker
+        name: locust-worker
+        role: worker
+    spec:
+      volumes:
+      - name: locust-volume
+        configMap:
+          name: locust-configmap
+      containers:
+        - name: locust-worker
+          image: locustio/locust:1.4.1 # Locust version
+          # resources: #TODO: Uncomment these lines for HPA
+          #   limits:
+          #     cpu: 200m
+          #   requests:
+          #     cpu: 100m
+          env:
+            - name: LOCUST_MODE_WORKER
+              value: "true"
+            - name: LOCUST_MASTER_NODE_HOST
+              value: locust-master
+            - name: LOCUST_LOCUSTFILE
+              value: /locust-tasks/locustfile.py
+          volumeMounts:
+          - name: locust-volume
+            mountPath: /locust-tasks/
