@@ -22,12 +22,12 @@ spec:
           name: locust-configmap
       containers:
         - name: locust-worker
-          image: locustio/locust:1.4.1 # Locust version
-          # resources: #TODO: Uncomment these lines for HPA
-          #   limits:
-          #     cpu: 200m
-          #   requests:
-          #     cpu: 100m
+          image: locustio/locust:1.4.3 # Locust version
+          resources:
+            limits:
+              cpu: 200m
+            requests:
+              cpu: 100m
           env:
             - name: LOCUST_MODE_WORKER
               value: "true"
@@ -38,3 +38,25 @@ spec:
           volumeMounts:
           - name: locust-volume
             mountPath: /locust-tasks/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust-master
+  labels:
+    name: locust-master
+spec:
+  type: LoadBalancer
+  selector:
+    name: locust-master
+    role: master  
+  ports:
+    - port: 8089
+      protocol: TCP
+      name: master-web
+    - port: 5557
+      protocol: TCP
+      name: master-port-1
+    - port: 5558
+      protocol: TCP
+      name: master-port-2

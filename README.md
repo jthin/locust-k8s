@@ -1,10 +1,22 @@
 # ☸ Locust on Kubernetes
 
-[Locust](https://locust.io/) is an open source load testing tool.
+[Locust](https://locust.io/) is an open source load testing tool. 
 
-Locust version tested: `1.4.1`.
+You can use it :
+- locally on your machine/servers 
+- with Docker 🐳
+- **with Kubernetes ☸**
 
-## Kubernetes
+Last Locust version tested: [`1.4.3`](https://github.com/locustio/locust/releases/tag/1.4.3)
+
+## Deploy Locust on Kubernetes
+
+### Create `Locust` namespace and switch to `Locust` namespace
+
+```bash
+kubectl create namespace locust
+kubectl config set-context --current --namespace=locust
+```
 
 ### Create a ConfigMap containing locust-tasks folder items
 
@@ -15,16 +27,17 @@ Your script must have the name `locustfile.py`.
 ```bash
 kubectl create configmap locust-configmap --from-file=locust-tasks/
 ```
-### (Optional) Activate HPA
-
-In `k8s` folder, open and modify: 
-- `locust-master.yaml`: uncomment the TODO (line 26-30).
-- `locust-hpa-autoscalling.yaml`: uncomment the content.
-
 ### Deploy
 
 ```bash
-kubectl create -f k8s
+kubectl apply -f k8s/locust-master-deployment.yaml
+kubectl apply -f k8s/locust-worker-deployment.yaml
+```
+
+### (Optional) Activate HPA
+
+```bash
+kubectl apply -f k8s/locust-worker-hpa.yaml
 ```
 
 ### Get external IP to access to Locust portal 
@@ -34,8 +47,14 @@ kubectl get svc locust-master -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
 ```
 
 ### Launch Locust portal
+
 `http://[external_ip]:8089`
 
+### Delete created ressources
+
+```bash
+kubectl delete namespace locust
+```
 ## Useful links
 
 - [Locust repository](https://github.com/locustio/locust)
