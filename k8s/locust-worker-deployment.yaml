@@ -22,7 +22,7 @@ spec:
           name: locust-configmap
       containers:
         - name: locust-worker
-          image: locustio/locust:1.4.3 # Locust version
+          image: locustio/locust:1.5.1 # Locust version
           resources:
             limits:
               cpu: 200m

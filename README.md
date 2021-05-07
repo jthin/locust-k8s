@@ -1,4 +1,4 @@
-# ☸ Locust on Kubernetes
+# ☸ Locust in Kubernetes
 
 [Locust](https://locust.io/) is an open source load testing tool. 
 
@@ -7,9 +7,9 @@ You can use it :
 - with Docker 🐳
 - **with Kubernetes ☸**
 
-Last Locust version tested: [`1.4.3`](https://github.com/locustio/locust/releases/tag/1.4.3)
+Last Locust version tested: [`1.5.1`](https://github.com/locustio/locust/releases/tag/1.5.1)
 
-## Deploy Locust on Kubernetes
+## Deploy Locust to Kubernetes
 
 ### Create `Locust` namespace and switch to `Locust` namespace
 
